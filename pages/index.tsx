@@ -19,13 +19,8 @@ const Home: NextPage = () => {
           alignItems: "center",
         }}
       >
-        <Typography variant="h4" component="h1" gutterBottom>
-          MUI v5 + Next.js with TypeScript example
-        </Typography>
-        <Typography variant="h5" gutterBottom>
-          Persisted{" "}
-          {resolvedTheme !== theme ? `${theme} (${resolvedTheme})` : theme} mode
-        </Typography>
+     
+      
         <Button
           css={css`
             background: linear-gradient(to top right, #2a48f3 0%, #c32cc2 100%);
