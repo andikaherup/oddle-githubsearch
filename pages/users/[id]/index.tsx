@@ -8,10 +8,14 @@ import { useTheme } from "next-themes";
 import { Button, Fab } from "@mui/material";
 import DarkModeSharpIcon from "@mui/icons-material/DarkModeSharp";
 import LightModeSharpIcon from "@mui/icons-material/LightModeSharp";
-const Home: NextPage = () => {
+const Users: NextPage = () => {
   const { theme, resolvedTheme, setTheme } = useTheme();
   return (
     <Container maxWidth="lg">
+        {/* //create title for the page */}
+        <Typography variant="h3" gutterBottom>
+            User Page
+        </Typography>
       <Fab
         css={css`
           background: linear-gradient(to top right, #2a48f3 0%, #c32cc2 100%);
@@ -29,4 +33,4 @@ const Home: NextPage = () => {
     </Container>
   );
 };
-export default Home;
+export default Users;
