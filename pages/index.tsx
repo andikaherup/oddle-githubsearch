@@ -6,34 +6,59 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { useTheme } from "next-themes";
-import { Button, Fab, Paper, Switch } from "@mui/material"
-import BottomNavigation from '@mui/material/BottomNavigation';
-import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import RestoreIcon from '@mui/icons-material/Restore';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ArchiveIcon from '@mui/icons-material/Archive';
+import { Button, Fab, Paper, Switch } from "@mui/material";
+import BottomNavigation from "@mui/material/BottomNavigation";
+import BottomNavigationAction from "@mui/material/BottomNavigationAction";
+import RestoreIcon from "@mui/icons-material/Restore";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import TextField from "@mui/material/TextField";
+import ArchiveIcon from "@mui/icons-material/Archive";
 const Home: NextPage = () => {
   const { theme, resolvedTheme, setTheme } = useTheme();
   const label = { inputProps: { "aria-label": "Switch demo" } };
   const [value, setValue] = useState(0);
   return (
-    <Box>
-    
-        <Box width="33vw"  sx={{ maxWidth: { xl: 466, ls: 466, md: 466 } ,background:"#FFFFFF"}}>
-          <Box
-            sx={{ display: "flex", alignItems: "space-beetween", justifyContent: "center" }}
-           >
-            <Typography gutterBottom>
-              Search
-            </Typography>
-            <Switch
-              onChange={() =>
-                setTheme(resolvedTheme === "light" ? "dark" : "light")
-              }
-            ></Switch>
-          </Box>
+    <Box sx={{ pb: 7, display: "flex", justifyContent: "center" }}>
+      <Box
+        width="33vw"
+        height="100vh"
+        sx={{
+          display: "flex",
+          justifyContent: "flex-start",
+          flexDirection: "column",
+          maxWidth: { xl: 466, ls: 466, md: 466 },
+          background: "#FFFFFF",
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            pt: 4,
+            pb: 2,
 
-          {/* <Box
+            m: 2,
+            borderRadius: 1,
+          }}
+        >
+          <Typography>Search</Typography>
+          <Switch
+            onChange={() =>
+              setTheme(resolvedTheme === "light" ? "dark" : "light")
+            }
+          ></Switch>
+        </Box>
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <TextField
+            fullWidth
+            sx={{ mx: 2 }}
+            id="outlined-search"
+            label="Enter GitHub username, i.e. gaearon"
+            type="search"
+          />
+        </Box>
+
+        {/* <Box
       sx={{
         display: 'flex',
         flexDirection: { xs: 'column', md: 'row' },
@@ -93,8 +118,8 @@ const Home: NextPage = () => {
         </Box>
       </Box>
       </Box> */}
-        </Box>
-       <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
+      </Box>
+      <Paper sx={{ width: "33vw", position: "fixed", bottom: 0 }} elevation={3}>
         <BottomNavigation
           showLabels
           value={value}
@@ -104,7 +129,6 @@ const Home: NextPage = () => {
         >
           <BottomNavigationAction label="Search" icon={<RestoreIcon />} />
           <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
-        
         </BottomNavigation>
       </Paper>
     </Box>
