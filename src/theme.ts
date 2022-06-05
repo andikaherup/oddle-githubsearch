@@ -23,7 +23,7 @@ export const darkTheme = createTheme({
 export const globalStyles = css`
   :root {
     body {
-      background-color: #fff;
+      background-color: #E5E5E5;
       color: #121212;
     }
   }

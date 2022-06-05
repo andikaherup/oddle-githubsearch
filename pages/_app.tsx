@@ -27,7 +27,7 @@ export default function MyApp(props: MyAppProps) {
             styles={css`
               :root {
                 body {
-                  background-color: #fff;
+                  background-color: #E5E5E5;
                   color: #121212;
                 }
               }

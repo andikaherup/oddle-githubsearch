@@ -1,32 +1,113 @@
 /**/
 import type { NextPage } from "next";
 import { css } from "@emotion/react";
+import { ReactNode, useEffect, useState } from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { useTheme } from "next-themes";
-import { Button, Fab } from "@mui/material";
-import DarkModeSharpIcon from "@mui/icons-material/DarkModeSharp";
-import LightModeSharpIcon from "@mui/icons-material/LightModeSharp";
+import { Button, Fab, Paper, Switch } from "@mui/material"
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import RestoreIcon from '@mui/icons-material/Restore';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import ArchiveIcon from '@mui/icons-material/Archive';
 const Home: NextPage = () => {
   const { theme, resolvedTheme, setTheme } = useTheme();
+  const label = { inputProps: { "aria-label": "Switch demo" } };
+  const [value, setValue] = useState(0);
   return (
-    <Container maxWidth="lg">
-      <Fab
-        css={css`
-          background: linear-gradient(to top right, #2a48f3 0%, #c32cc2 100%);
-        `}
-        sx={{ position: "absolute", top: 16, right: 16 }}
-        onClick={() => setTheme(resolvedTheme === "light" ? "dark" : "light")}
+    <Box>
+    
+        <Box width="33vw"  sx={{ maxWidth: { xl: 466, ls: 466, md: 466 } ,background:"#FFFFFF"}}>
+          <Box
+            sx={{ display: "flex", alignItems: "space-beetween", justifyContent: "center" }}
+           >
+            <Typography gutterBottom>
+              Search
+            </Typography>
+            <Switch
+              onChange={() =>
+                setTheme(resolvedTheme === "light" ? "dark" : "light")
+              }
+            ></Switch>
+          </Box>
+
+          {/* <Box
+      sx={{
+        display: 'flex',
+        flexDirection: { xs: 'column', md: 'row' },
+        alignItems: 'center',
+        bgcolor: 'background.paper',
+        overflow: 'hidden',
+        borderRadius: '12px',
+        boxShadow: 1,
+        fontWeight: 'bold',
+      }}
+    >
+      <Box
+        component="img"
+        sx={{
+          height: 233,
+          width: 350,
+          maxHeight: { xs: 233, md: 167 },
+          maxWidth: { xs: 350, md: 250 },
+        }}
+        alt="The house from the offer."
+        src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2"
+      />
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: { xs: 'center', md: 'flex-start' },
+          m: 3,
+          minWidth: { md: 350 },
+        }}
       >
-        {/* Toggle {resolvedTheme === "light" ? "dark" : "light"} mode */}
-        {resolvedTheme === "light" ? (
-          <DarkModeSharpIcon />
-        ) : (
-          <LightModeSharpIcon sx={{ color: "white" }} />
-        )}
-      </Fab>
-    </Container>
+        <Box component="span" sx={{ fontSize: 16, mt: 1 }}>
+          123 Main St, Phoenix AZ
+        </Box>
+        <Box component="span" sx={{ color: 'primary.main', fontSize: 22 }}>
+          $280,000 — $310,000
+        </Box>
+        <Box
+          sx={{
+            mt: 1.5,
+            p: 0.5,
+            backgroundColor: (theme) => alpha(theme.palette.primary.main, 0.1),
+            borderRadius: '5px',
+            color: 'primary.main',
+            fontWeight: 'medium',
+            display: 'flex',
+            fontSize: 12,
+            alignItems: 'center',
+            '& svg': {
+              fontSize: 21,
+              mr: 0.5,
+            },
+          }}
+        >
+          <ErrorOutlineIcon />
+          CONFIDENCE SCORE 85%
+        </Box>
+      </Box>
+      </Box> */}
+        </Box>
+       <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
+        <BottomNavigation
+          showLabels
+          value={value}
+          onChange={(event, newValue) => {
+            setValue(newValue);
+          }}
+        >
+          <BottomNavigationAction label="Search" icon={<RestoreIcon />} />
+          <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
+        
+        </BottomNavigation>
+      </Paper>
+    </Box>
   );
 };
 export default Home;
