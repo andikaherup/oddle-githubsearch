@@ -27,7 +27,12 @@ const Home: NextPage = () => {
           justifyContent: "flex-start",
           flexDirection: "column",
           maxWidth: { xl: 466, ls: 466, md: 466 },
-          background: "#FFFFFF",
+          ...(resolvedTheme === 'light' && {
+            backgroundColor: '#FFFFFF',
+          }),
+           ...(resolvedTheme === 'dark' && {
+            backgroundColor: '#021E3C',
+          })
         }}
       >
         <Box
@@ -56,6 +61,30 @@ const Home: NextPage = () => {
             label="Enter GitHub username, i.e. gaearon"
             type="search"
           />
+        </Box>
+     
+        <Box
+          sx={{
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+             <Box
+          component="img"
+          sx={{ width: "120px" }}
+          alt="github logo"
+          src="/githubmark.svg"
+        />
+          <Box component="img" alt="github logo" src="/githublogo.svg" />
+
+          <Typography variant="body2" px={5} align="center">
+            Enter GitHub username and search users matching the input like
+            Google Search, click avatars to view more details, including
+            repositories, followers and following.
+          </Typography>
         </Box>
 
         {/* <Box
@@ -121,6 +150,12 @@ const Home: NextPage = () => {
       </Box>
       <Paper sx={{ width: "33vw", position: "fixed", bottom: 0 }} elevation={3}>
         <BottomNavigation
+          sx={{  ...(resolvedTheme === 'light' && {
+            backgroundColor: '#FFFFFF',
+          }),
+           ...(resolvedTheme === 'dark' && {
+            backgroundColor: '#021E3C',
+          }) }}
           showLabels
           value={value}
           onChange={(event, newValue) => {
