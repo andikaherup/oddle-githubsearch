@@ -3,11 +3,11 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-type Props = {
-  likeCard: (id: number) => void;
-};
 
-const Post: React.FC<Props> = ({ likeCard }) => {
+type Props = {
+  data: any;
+};
+const Post: React.FC<Props> = ({ data }) => {
   return (
     <Box
       sx={{
@@ -16,9 +16,10 @@ const Post: React.FC<Props> = ({ likeCard }) => {
         alignItems: "center",
         bgcolor: "background.paper",
         overflow: "hidden",
-        borderRadius: "12px",
-        boxShadow: 1,
+        borderRadius: "10px",
+        boxShadow: 2,
         fontWeight: "bold",
+        height: 80,
       }}
     >
        
@@ -27,6 +28,7 @@ const Post: React.FC<Props> = ({ likeCard }) => {
         sx={{
           height: 64,
           width: 64,
+          ml: 1
         
         }}
         alt="The house from the offer."
@@ -42,11 +44,11 @@ const Post: React.FC<Props> = ({ likeCard }) => {
           minWidth: { md: 350 },
         }}
       >
-        <IconButton aria-label="add to favorites">
+        {/* <IconButton aria-label="add to favorites">
           <FavoriteIcon />
-        </IconButton>
+        </IconButton> */}
         <Box component="span" sx={{ fontSize: 16, mt: 1 }}>
-          Bob
+          {data.name}
         </Box>
 
         <Box
