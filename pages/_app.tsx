@@ -7,12 +7,14 @@ import createEmotionCache from "../src/createEmotionCache";
 import PageProvider from "../src/PageProvider";
 import { ThemeProvider } from "next-themes";
 import { GlobalStyles } from "@mui/material";
+
+import { wrapper } from "app/store";
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
 }
-export default function MyApp(props: MyAppProps) {
+function MyApp(props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
   return (
     <ThemeProvider>
@@ -45,3 +47,5 @@ export default function MyApp(props: MyAppProps) {
     </ThemeProvider>
   );
 }
+
+export default wrapper.withRedux(MyApp);
