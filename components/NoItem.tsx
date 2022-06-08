@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
      
      
 const NoItem: any = ({}) => { 
-      
+  return (
       <Box
         sx={{
           height: "100%",
@@ -32,5 +32,6 @@ const NoItem: any = ({}) => {
           repositories, followers and following.
         </Typography>
       </Box>
+  )
 }
 export default NoItem

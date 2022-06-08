@@ -32,7 +32,7 @@ const Post: React.FC<Props> = ({ data }) => {
         
         }}
         alt="The house from the offer."
-        src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2"
+        src={data.avatar_url}
       />
       
       <Box
@@ -48,7 +48,7 @@ const Post: React.FC<Props> = ({ data }) => {
           <FavoriteIcon />
         </IconButton> */}
         <Box component="span" sx={{ fontSize: 16, mt: 1 }}>
-          {data.name}
+          {data.login}
         </Box>
 
         <Box
