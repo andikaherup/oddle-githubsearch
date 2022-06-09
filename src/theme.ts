@@ -1,19 +1,36 @@
-import { createTheme } from '@mui/material/styles';
-import { red } from '@mui/material/colors';
+import { PaletteOptions, createTheme, css } from "@mui/material/styles";
 
-// Create a theme instance.
-const theme = createTheme({
+export type AllowedTheme = NonNullable<PaletteOptions["mode"]>;
+
+export const DEFAULT_THEME: AllowedTheme = "dark";
+
+export const lightTheme = createTheme({
   palette: {
-    primary: {
-      main: '#556cd6',
-    },
-    secondary: {
-      main: '#19857b',
-    },
-    error: {
-      main: red.A400,
-    },
+    primary: { main: "#9147FF" },
+    secondary: { main: "#2a48f3" },
+    mode: "light",
   },
 });
 
-export default theme;
+export const darkTheme = createTheme({
+  palette: {
+    primary: { main: "#9147FF" },
+    secondary: { main: "#2a48f3" },
+    mode: "dark",
+  },
+});
+
+export const globalStyles = css`
+  :root {
+    body {
+      background-color: #E5E5E5;
+      color: #121212;
+    }
+  }
+  [data-theme="dark"] {
+    body {
+      background-color: #121212;
+      color: #fff;
+    }
+  }
+`;

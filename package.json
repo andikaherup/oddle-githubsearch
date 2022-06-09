@@ -16,10 +16,13 @@
     "@emotion/styled": "latest",
     "@mui/icons-material": "latest",
     "@mui/material": "latest",
+    "@reduxjs/toolkit": "^1.8.2",
     "next": "latest",
+    "next-redux-wrapper": "^7.0.5",
     "next-themes": "^0.2.0",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "react-redux": "^8.0.2"
   },
   "devDependencies": {
     "@types/node": "latest",
