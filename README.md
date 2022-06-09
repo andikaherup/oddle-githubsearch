@@ -1,4 +1,4 @@
-# Oddle Test Next.js frontend example
+# Oddle Test Next.js frontend repo
 
 DEMO 👉 https://oddle-githubsearch.vercel.app/
 
