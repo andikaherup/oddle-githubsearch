@@ -6,7 +6,9 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Link from 'next/link'
 import Box from "@mui/material/Box";
+import Router from "next/router";
 import { useTheme } from "next-themes";
+import { wrapper } from "app/store";
 import { Button, CircularProgress, Fab, Pagination, Paper, Stack, Switch } from "@mui/material";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
@@ -20,69 +22,23 @@ import Grid from "@mui/material/Grid";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import { AnyAction } from "@reduxjs/toolkit";
 import { setDefaultResultOrder } from "dns";
-const Home: NextPage = () => {
+import { selectUsers, setSelectedUser,setUsers, selectSelectedUsers ,addFavorites} from "app/store/slices/user";
+import { useSelector, useDispatch } from "react-redux";
+const Home: NextPage = (props: any) => {
   const { theme, resolvedTheme, setTheme } = useTheme();
+  const dispatch = useDispatch();
   const label = { inputProps: { "aria-label": "Switch demo" } };
   const [value, setValue] = useState(0);
-  const [users,setUsers] = useState([]);
+  const userList =  useSelector(selectUsers);
+  const [dataEmpty , setDataEmpty] = useState(false);
   const [search, setSearch] = useState('');
   const [counter, setCounter] = useState(0);
   const [order,setOrder] = useState('desc');
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [first , setFirst] = useState(true);
-  const data = [
-    {
-      name: "Bobs",
-      avatar:
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2",
-      followers: "100",
-      following: "100",
-    },
-    {
-      name: "Bob1",
-      avatar:
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2",
-      followers: "100",
-      following: "100",
-    },
-    {
-      name: "Bob2",
-      avatar:
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2",
-      followers: "100",
-      following: "100",
-    },
-    {
-      name: "Bob3",
-      avatar:
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2",
-      followers: "100",
-      following: "100",
-    },
-    {
-      name: "Bob4",
-      avatar:
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2",
-      followers: "100",
-      following: "100",
-    },
-    {
-      name: "Bob4",
-      avatar:
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2",
-      followers: "100",
-      following: "100",
-    },
-    {
-      name: "Bob4",
-      avatar:
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2",
-      followers: "100",
-      following: "100",
-    },
-  ];
-  const [query, setQuery] = useState('spiderman') //Value to look for when submit
+  const {resolvedUrl} = props;
+
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
@@ -99,16 +55,21 @@ const Home: NextPage = () => {
 
   // make function to call api users from github api
   const getUsers = async () => {
-    
     const response = await fetch(
       `https://api.github.com/search/users?q=${search}&order=${order}&page=${page}&per_page=10`
     );
     const data = await response.json();
     //set loading false after request
     setFirst(false);
-    setLoading(false);
-    setUsers(data.items);
+    if (data.items && data.items.length === 0) {
+      setDataEmpty(true);
+    }else {
+      setDataEmpty(false);
+    }
     setCounter(data.total_count);
+    dispatch(setUsers(data.items));
+    setLoading(false);
+    console.log("data empty",dataEmpty, data, userList);
   };
  
   
@@ -120,6 +81,16 @@ const Home: NextPage = () => {
   const handlePageChange = (event:any,value:any) =>{
     setPage(value);
     console.log(value);
+  }
+
+  const handleCardDetail = (user:any) =>{
+    dispatch(setSelectedUser(user));
+    //go to user detail page
+    Router.push(`/users/${user.login}`);
+
+  }
+  const handleFavorite = (user:any) =>{
+    dispatch(addFavorites(user));
   }
 
 
@@ -176,17 +147,17 @@ const Home: NextPage = () => {
         {loading && <Box sx={{ display:"flex" ,height: "100vh", flexDirection: "column" ,justifyContent: "center",alignItems: 'center'}}>
           <CircularProgress color="secondary"
            />  <Typography>Loading...</Typography></Box>}
-        {!loading && users && !first && users.length === 0 && <Box sx={{ display: "flex",height: "100vh", justifyContent: "center",px: 2, mt: 5 }}>
+        {!loading  && !first && dataEmpty && <Box sx={{ display: "flex",height: "100vh", justifyContent: "center",px: 2, mt: 5 }}>
           <NoResult value={search} />  
         </Box> }
-        {!loading && users && first && users.length === 0 && <Box sx={{ display: "flex",height: "100vh", justifyContent: "center",px: 2, mt: 5 }}>
+        {!loading && first && !dataEmpty && <Box sx={{ display: "flex",height: "100vh", justifyContent: "center",px: 2, mt: 5 }}>
           <NoItem />  
         </Box> }
-        {!loading && users && users.length > 0 && <Box sx={{ height: "100vh",px: 2, mt: 5 }}>
+        {!loading && userList && userList.length > 0 && <Box sx={{ height: "100vh",px: 2, mt: 5 }}>
           <Grid container spacing={2}>
-            {users.map((item, index) => (
+            {userList.map((item, index) => (
               <Grid item xs={6} md={6}>
-                <UserCards key={index} data={item}></UserCards>
+                <UserCards key={index} data={item} onClickDetail={handleCardDetail} onClickFavorite={handleFavorite}></UserCards>
               </Grid>
             ))}
           </Grid>
@@ -220,4 +191,16 @@ const Home: NextPage = () => {
     </Box>
   );
 };
+
+export const getServerSideProps = wrapper.getServerSideProps(store => async ({resolvedUrl}) => {
+  console.log(resolvedUrl)
+
+  store.dispatch(setSelectedUser(resolvedUrl))
+  return {
+    props: {
+      resolvedUrl
+    }
+  }
+})
+
 export default Home;

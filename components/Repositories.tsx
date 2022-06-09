@@ -3,18 +3,13 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import Typography from "@mui/material/Typography";
+
 
 type Props = {
-  data: any;
-  onClickDetail:any
-  onClickFavorite: any
+  repoData: any;
 };
-
-const Post: React.FC<Props> = ({ data,onClickDetail=()=>{},onClickFavorite }) => {
-  const handleClickDetail = () => {
-    console.log("clicked")
-    onClickDetail(data);
-  }
+const Repositories: React.FC<Props> = ({ repoData }) => {
   return (
     <Box
       sx={{
@@ -29,20 +24,6 @@ const Post: React.FC<Props> = ({ data,onClickDetail=()=>{},onClickFavorite }) =>
         height: 80,
       }}
     >
-       
-      <Box
-        component="img"
-        sx={{
-          height: 64,
-          width: 64,
-          ml: 1
-        
-        }}
-        alt="The house from the offer."
-        src={data.avatar_url}
-        onClick={handleClickDetail}
-      />
-      
       <Box
         sx={{
           display: "flex",
@@ -51,12 +32,13 @@ const Post: React.FC<Props> = ({ data,onClickDetail=()=>{},onClickFavorite }) =>
           m: 3,
           minWidth: { md: 350 },
         }}
-        onClick={handleClickDetail}
       >
-       
-        <Box component="span" sx={{ fontSize: 16, mt: 1 }}>
+        {/* <IconButton aria-label="add to favorites">
+          <FavoriteIcon />
+        </IconButton> */}
+        {/* <Box component="span" sx={{ fontSize: 16, mt: 1 }}>
           {data.login}
-        </Box>
+        </Box> */}
 
         <Box
           sx={{
@@ -73,7 +55,8 @@ const Post: React.FC<Props> = ({ data,onClickDetail=()=>{},onClickFavorite }) =>
             },
           }}
         >
-          17,3K Followers
+          <Typography >103 FOllowers</Typography>
+          
         </Box>
         <Box
           sx={{
@@ -90,15 +73,11 @@ const Post: React.FC<Props> = ({ data,onClickDetail=()=>{},onClickFavorite }) =>
             },
           }}
         >
-          103 Following
+          <Typography >103 Following</Typography>
         </Box>
-        
       </Box>
-      <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
     </Box>
   );
 };
 
-export default Post;
+export default Repositories;
