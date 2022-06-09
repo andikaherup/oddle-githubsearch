@@ -1,45 +1,33 @@
-# Next.js with TypeScript example
+# Oddle Test Next.js frontend example
 
-## How to use
+DEMO 👉 https://oddle-githubsearch.vercel.app/
 
-Download the example [or clone the repo](https://github.com/mui/material-ui):
+This is a repo in order to complete oddle recruitment test
 
-<!-- #default-branch-switch -->
+## Prerequisites
 
-```sh
-curl https://codeload.github.com/mui/material-ui/tar.gz/master | tar -xz --strip=2  material-ui-master/examples/nextjs-with-typescript
-cd nextjs-with-typescript
+You will need [Node.js](https://nodejs.org) version 8.0 or greater installed on your system.
+
+## Setup
+
+Get the code by either cloning this repository using git
+
+```
+git clone https://github.com/andikaherup/oddle-githubsearch.git
 ```
 
-Install it and run:
+... or [downloading source code](https://github.com/andikaherup/oddle-githubsearch/archive/refs/heads/main.zip) code as a zip archive.
 
-```sh
+Once downloaded, open the terminal in the project directory, and install dependencies with:
+
+```
 npm install
+
+```
+Then start the example app with:
+
+```
 npm run dev
 ```
 
-or:
-
-<!-- #default-branch-switch -->
-
-[![Edit on StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/mui/material-ui/tree/master/examples/nextjs-with-typescript)
-
-[![Edit on CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/github/mui/material-ui/tree/master/examples/nextjs-with-typescript)
-
-## The idea behind the example
-
-The project uses [Next.js](https://github.com/vercel/next.js), which is a framework for server-rendered React apps.
-It includes `@mui/material` and its peer dependencies, including `emotion`, the default style engine in MUI v5. If you prefer, you can [use styled-components instead](https://mui.com/material-ui/guides/interoperability/#styled-components).
-
-## The link component
-
-Next.js has [a custom Link component](https://nextjs.org/docs/api-reference/next/link).
-The example folder provides adapters for usage with MUI.
-More information [in the documentation](https://mui.com/material-ui/guides/routing/#next-js).
-
-## What's next?
-
-<!-- #default-branch-switch -->
-
-You now have a working example project.
-You can head back to the documentation, continuing browsing it from the [templates](https://mui.com/material-ui/getting-started/templates/) section.
+The app should now be up and running at http://localhost:3000 🚀
