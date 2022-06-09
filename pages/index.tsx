@@ -22,7 +22,7 @@ import Grid from "@mui/material/Grid";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import { AnyAction } from "@reduxjs/toolkit";
 import { setDefaultResultOrder } from "dns";
-import { selectUsers, setSelectedUser,setUsers, selectSelectedUsers ,addFavorites} from "app/store/slices/user";
+import { selectUsers, setSelectedUser,setUsers,addFavorites} from "app/store/slices/user";
 import { useSelector, useDispatch } from "react-redux";
 const Home: NextPage = (props: any) => {
   const { theme, resolvedTheme, setTheme } = useTheme();

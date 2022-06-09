@@ -28,52 +28,38 @@ const Repositories: React.FC<Props> = ({ repoData }) => {
         sx={{
           display: "flex",
           flexDirection: "column",
-          alignItems: { xs: "center", md: "flex-start" },
-          m: 3,
-          minWidth: { md: 350 },
+          alignItems:  "flex-start", 
+          justifyContent: "flex-start",
+          padding: "10px",
         }}
       >
-        {/* <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton> */}
-        {/* <Box component="span" sx={{ fontSize: 16, mt: 1 }}>
-          {data.login}
-        </Box> */}
+       
+        <Box component="span" sx={{ fontSize: 16,lineHeight: '24px' }}>
+          {repoData.name}
+        </Box>
 
         <Box
           sx={{
-            mt: 1.5,
-          
             borderRadius: "5px",
             fontWeight: "medium",
             display: "flex",
-            fontSize: 12,
+            top: '34px',
             alignItems: "center",
-            "& svg": {
-              fontSize: 21,
-              mr: 0.5,
-            },
           }}
         >
-          <Typography >103 FOllowers</Typography>
+          <Typography sx={{fontSize: '12px'}}>{repoData.stargazers_count} stars</Typography>
           
         </Box>
         <Box
           sx={{
-         
-          
             borderRadius: "5px",
             fontWeight: "medium",
             display: "flex",
-            fontSize: 12,
             alignItems: "center",
-            "& svg": {
-              fontSize: 21,
-              mr: 0.5,
-            },
+           
           }}
         >
-          <Typography >103 Following</Typography>
+          <Typography sx={{ fontSize: '12px'}}>{repoData.forks_count} forks</Typography>
         </Box>
       </Box>
     </Box>

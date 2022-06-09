@@ -42,7 +42,7 @@ export const UserSlice = createSlice({
 });
 export const {setUsers, setSelectedUser,addFavorites} = UserSlice.actions;
 
-export const selectSelectedUsers = (state: AppState) => state.user.selectedUser;
+export const selectSelectedUser = (state: AppState) => state.user.selectedUser;
 export const selectUsers = (state: AppState) => state.user.users;
 export const selectFavorites = (state: AppState) => state.user.favorites;
 

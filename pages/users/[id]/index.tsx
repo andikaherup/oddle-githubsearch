@@ -7,11 +7,19 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Link from "next/link";
 import Box from "@mui/material/Box";
+import { wrapper } from "app/store";
+import Router from "next/router";
+
 import NoFavorite from "components/NoFavorite";
 import { useTheme } from "next-themes";
 import Avatar from "@mui/material/Avatar";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
+
+import { selectUsers, setSelectedUser,setUsers,addFavorites,selectSelectedUser} from "app/store/slices/user";
+
+import { useSelector, useDispatch } from "react-redux";
+import { useRouter } from 'next/router'
 import {
   Button,
   CircularProgress,
@@ -27,8 +35,10 @@ import RestoreIcon from "@mui/icons-material/Restore";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import TextField from "@mui/material/TextField";
 import Repositories from "components/Repositories";
+
 import HomeIcon from "@mui/icons-material/Home";
 import ApartmentIcon from "@mui/icons-material/Apartment";
+import UserCards from "components/UserCards";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -66,94 +76,59 @@ const UserDetailPage: NextPage = () => {
   const { theme, resolvedTheme, setTheme } = useTheme();
   const label = { inputProps: { "aria-label": "Switch demo" } };
   const [value, setValue] = useState(0);
-  const [users, setUsers] = useState([]);
+  //set router query  id to user id
+  const router = useRouter()
+  const userId = router.query.id
+  const dispatch = useDispatch();
   const [search, setSearch] = useState("");
-  const [counter, setCounter] = useState(0);
-  const [order, setOrder] = useState("desc");
+  const user = useSelector(selectSelectedUser);
+  const [userDetail, setUserDetail] = useState(user);
   const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(1);
-  const [first, setFirst] = useState(true);
-  const data = [
-    {
-      name: "Bobs",
-      avatar:
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2",
-      followers: "100",
-      following: "100",
-    },
-    {
-      name: "Bob1",
-      avatar:
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2",
-      followers: "100",
-      following: "100",
-    },
-    {
-      name: "Bob2",
-      avatar:
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2",
-      followers: "100",
-      following: "100",
-    },
-    {
-      name: "Bob3",
-      avatar:
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2",
-      followers: "100",
-      following: "100",
-    },
-    {
-      name: "Bob4",
-      avatar:
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2",
-      followers: "100",
-      following: "100",
-    },
-    {
-      name: "Bob4",
-      avatar:
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2",
-      followers: "100",
-      following: "100",
-    },
-    {
-      name: "Bob4",
-      avatar:
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2",
-      followers: "100",
-      following: "100",
-    },
-  ];
-
+  const [userRepo, setUserRepo] = useState([]);
+  const [userFollowers, setUserFollowers] = useState([]);
+  const [userFollowing, setUserFollowing] = useState([]);
+ 
+  //run getUerDetail function when the page is loaded
   useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      //if search is empty dont do anything
-      if (search === "") {
-        return;
-      }
-      setLoading(true);
-      getUsers();
-      // Send Axios request here
-    }, 3000);
-  }, [search, page]);
+
+    //if user login not equal to query param, get user detai
+      getUserDetail();
+    
+  }, []);
+  const handleCardDetail = (user:any) =>{
+    dispatch(setSelectedUser(user));
+    //go to user detail page
+    Router.push(`/users/${user.login}`);
+
+  }
+  const handleFavorite = (user:any) =>{
+    dispatch(addFavorites(user));
+  }
 
   // make function to call api users from github api
-  const getUsers = async () => {
+  const getUserDetail = async () => {
     const response = await fetch(
-      `https://api.github.com/search/users?q=${search}&order=${order}&page=${page}&per_page=10`
+      `https://api.github.com/users/${userId}`
     );
     const data = await response.json();
-    //set loading false after request
-    setFirst(false);
-    setLoading(false);
-    setUsers(data.items);
-    setCounter(data.total_count);
+    setUserDetail(data);
+    //fetch multiple api at the same time
+    const response2 = await Promise.all([
+      fetch(data.repos_url),
+      fetch(data.followers_url),
+      fetch(data.following_url.split("following")[0]+'following'),
+    ]);
+    //devide response 2 into repo, followers and following
+    const [repo, followers, following] = await Promise.all(
+      response2.map((res) => res.json())
+    );
+    setUserRepo(repo);
+    setUserFollowers(followers);
+    setUserFollowing(following);
+    
   };
 
-  const handleChange = (event: any) => {
-    setSearch(event.target.value);
-    console.log(search);
-  };
+  
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -207,7 +182,7 @@ const UserDetailPage: NextPage = () => {
         >
           <Avatar
             alt="Remy Sharp"
-            src="https://images.unsplash.com/photo-1563298723-dcfebaa392e3"
+            src={userDetail?.avatar_url}
             sx={{ width: 160, height: 160 }}
           />
           <Box>
@@ -221,7 +196,7 @@ const UserDetailPage: NextPage = () => {
               textAlign: "center",
             }}
           >
-            Bob The
+            {userDetail?.name}
           </Typography>
           </Box>
           <Box>
@@ -235,7 +210,7 @@ const UserDetailPage: NextPage = () => {
               textAlign: "center",
             }}
           >
-            @bobthe
+            {userDetail?.login}
           </Typography>
           </Box>
           <Box
@@ -256,7 +231,7 @@ const UserDetailPage: NextPage = () => {
                 textAlign: "left",
               }}
             >
-              Texas, US
+              {userDetail?.location}
             </Typography>
           </Box>
         </Box>
@@ -268,28 +243,43 @@ const UserDetailPage: NextPage = () => {
             onChange={handleTabChange}
             aria-label="basic tabs example"
           >
-            <Tab label="Item One" {...a11yProps(0)} />
-            <Tab label="Item Two" {...a11yProps(1)} />
-            <Tab label="Item Three" {...a11yProps(2)} />
+            <Tab label={`Repositories ${userDetail?.followers}` } {...a11yProps(0)} />
+            <Tab label={`Followers ${userDetail?.followers}`} {...a11yProps(1)} />
+            <Tab label={`Following ${userDetail?.following}`} {...a11yProps(2)} />
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
-          <Box sx={{ height: "100vh", px: 2, mt: 5 }}>
+          <Paper sx={{ height: "100vh", px: 2, mt: 5 ,overflow: 'auto'}}>
             <Grid container spacing={2}>
-              {data.map((item, index) => (
-                <Grid item xs={6} md={6}>
-                  <Repositories key={index} repoData={item}></Repositories>
-                 
-                </Grid>
+              {userRepo.map((repo) => (
+                <Grid item xs={12} sm={6} md={6} lg={6}>
+                  <Repositories repoData={repo}></Repositories>
+                  </Grid>
               ))}
             </Grid>
-          </Box>
+          </Paper>
         </TabPanel>
         <TabPanel value={value} index={1}>
-          Item Two
+        <Paper sx={{ height: "100vh", px: 2, mt: 5 ,overflow: 'auto'}}>
+            <Grid container spacing={2}>
+              {userFollowers.map((item,index) => (
+                <Grid item xs={12} sm={6} md={6} lg={6}>
+                <UserCards key={index} data={item} onClickDetail={handleCardDetail} onClickFavorite={handleFavorite}></UserCards>
+                  </Grid>
+              ))}
+            </Grid>
+          </Paper>
         </TabPanel>
         <TabPanel value={value} index={2}>
-          Item Three
+        <Paper sx={{ height: "100vh", px: 2, mt: 5 ,overflow: 'auto'}}>
+            <Grid container spacing={2}>
+              {userFollowing.map((item,index) => (
+                <Grid item xs={12} sm={6} md={6} lg={6}>
+                <UserCards key={index} data={item} onClickDetail={handleCardDetail} onClickFavorite={handleFavorite}></UserCards>
+                  </Grid>
+              ))}
+            </Grid>
+          </Paper>
         </TabPanel>
         </Box>
       </Box>
@@ -336,4 +326,15 @@ const UserDetailPage: NextPage = () => {
     </Box>
   );
 };
+
+export const getServerSideProps = wrapper.getServerSideProps(store => async ({resolvedUrl}) => {
+
+
+  store.dispatch(setSelectedUser(resolvedUrl))
+  return {
+    props: {
+      resolvedUrl
+    }
+  }
+})
 export default UserDetailPage;
