@@ -4,7 +4,9 @@ import { css } from "@emotion/react";
 import { ReactNode, useEffect, useState } from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import Link from 'next/link'
+import Link from 'next/link';
+import Router from "next/router";
+
 import Box from "@mui/material/Box";
 import NoFavorite from "components/NoFavorite";
 import { useTheme } from "next-themes";
@@ -12,110 +14,50 @@ import { Button, CircularProgress, Fab, Pagination, Paper, Stack, Switch } from 
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import RestoreIcon from "@mui/icons-material/Restore";
+import UserCards from "components/UserCards";
+
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import { useSelector, useDispatch } from "react-redux";
+import Grid from "@mui/material/Grid";
+
 import TextField from "@mui/material/TextField";
+import {  addFavorites ,removeFavorites,setSelectedUser,selectFavorites} from "app/store/slices/user";
 
 
 const Liked: NextPage = () => {
   const { theme, resolvedTheme, setTheme } = useTheme();
   const label = { inputProps: { "aria-label": "Switch demo" } };
   const [value, setValue] = useState(0);
-  const [users,setUsers] = useState([]);
+
   const [search, setSearch] = useState('');
-  const [counter, setCounter] = useState(0);
-  const [order,setOrder] = useState('desc');
+
+  const dispatch = useDispatch();
+  const users = useSelector(selectFavorites);
+  const favList = useSelector(selectFavorites);
+
+
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
-  const [first , setFirst] = useState(true);
-  const data = [
-    {
-      name: "Bobs",
-      avatar:
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2",
-      followers: "100",
-      following: "100",
-    },
-    {
-      name: "Bob1",
-      avatar:
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2",
-      followers: "100",
-      following: "100",
-    },
-    {
-      name: "Bob2",
-      avatar:
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2",
-      followers: "100",
-      following: "100",
-    },
-    {
-      name: "Bob3",
-      avatar:
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2",
-      followers: "100",
-      following: "100",
-    },
-    {
-      name: "Bob4",
-      avatar:
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2",
-      followers: "100",
-      following: "100",
-    },
-    {
-      name: "Bob4",
-      avatar:
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2",
-      followers: "100",
-      following: "100",
-    },
-    {
-      name: "Bob4",
-      avatar:
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2",
-      followers: "100",
-      following: "100",
-    },
-  ];
-  const [query, setQuery] = useState('spiderman') //Value to look for when submit
 
-  useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      //if search is empty dont do anything
-      if (search === '') {
-        return;
-      }
-      setLoading(true);
-      getUsers()
-      // Send Axios request here
-    }, 3000)
-     
-  }, [search,page])
 
-  // make function to call api users from github api
-  const getUsers = async () => {
-    
-    const response = await fetch(
-      `https://api.github.com/search/users?q=${search}&order=${order}&page=${page}&per_page=10`
-    );
-    const data = await response.json();
-    //set loading false after request
-    setFirst(false);
-    setLoading(false);
-    setUsers(data.items);
-    setCounter(data.total_count);
-  };
- 
-  
-  const handleChange = (event:any) =>{
-    setSearch(event.target.value);
-    console.log(search);
- }
- //create handle for page change
+
   const handlePageChange = (event:any,value:any) =>{
     setPage(value);
     console.log(value);
+  }
+ 
+
+  const handleCardDetail = (user:any) =>{
+    dispatch(setSelectedUser(user));
+    //go to user detail page
+    Router.push(`/users/${user.login}`);
+
+  }
+  const handleFavorite = (user:any) =>{
+    dispatch(addFavorites(user));
+  }
+  const handleRemoveFavorite = (user:any) =>{
+    dispatch(removeFavorites(user));
   }
 
 
@@ -130,8 +72,6 @@ const Liked: NextPage = () => {
           display: "flex",
           justifyContent: "flex-start",
           flexDirection: "column",
-          
-      
             backgroundColor: "#FFFFFF",
           
           ...(resolvedTheme === "dark" && {
@@ -158,9 +98,19 @@ const Liked: NextPage = () => {
           ></Switch>
         </Box>
      
-        {!loading && <Box sx={{ display: "flex",height: "100vh", justifyContent: "center",px: 2, mt: 5 }}>
+        {!loading && users?.length === 0 && <Box sx={{ display: "flex",height: "100vh", justifyContent: "center",px: 2, mt: 5 }}>
           <NoFavorite value={search} />  
         </Box> }
+        {!loading && users?.length > 0 && <Box sx={{ height: "100vh",px: 2, mt: 5 }}>
+          <Grid container spacing={2}>
+            {users.map((item, index) => (
+              <Grid item xs={6} md={6}>
+                <UserCards key={index} data={item} onClickDetail={handleCardDetail} status={favList.find(user => user.login === item.login) ? "fav" : "nofav"} onClickFavorite={handleFavorite} onClickRemoveFavorite={handleRemoveFavorite}></UserCards>
+              </Grid>
+            ))}
+          </Grid>
+         
+        </Box>}
         
       </Box>
 

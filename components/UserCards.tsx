@@ -8,13 +8,20 @@ type Props = {
   data: any;
   onClickDetail:any
   onClickFavorite: any
+  onClickRemoveFavorite: any
+  status : string
 };
 
-const Post: React.FC<Props> = ({ data,onClickDetail=()=>{},onClickFavorite }) => {
+const Post: React.FC<Props> = ({ data,status,onClickDetail=()=>{},onClickFavorite =()=>{},onClickRemoveFavorite=()=>{} }) => {
   const handleClickDetail = () => {
-    console.log("clicked")
     onClickDetail(data);
   }
+  const handleClickFavorite = () => {
+      onClickFavorite(data);
+  }
+    const handleClickRemoveFavorite=  () => {
+      onClickRemoveFavorite(data);
+    }
   return (
     <Box
       sx={{
@@ -25,6 +32,7 @@ const Post: React.FC<Props> = ({ data,onClickDetail=()=>{},onClickFavorite }) =>
         overflow: "hidden",
         borderRadius: "10px",
         boxShadow: 2,
+        position: 'relative',
         fontWeight: "bold",
         height: 80,
       }}
@@ -49,6 +57,7 @@ const Post: React.FC<Props> = ({ data,onClickDetail=()=>{},onClickFavorite }) =>
           flexDirection: "column",
           alignItems: { xs: "center", md: "flex-start" },
           m: 3,
+        
           minWidth: { md: 350 },
         }}
         onClick={handleClickDetail}
@@ -92,11 +101,14 @@ const Post: React.FC<Props> = ({ data,onClickDetail=()=>{},onClickFavorite }) =>
         >
           103 Following
         </Box>
-        
+      
       </Box>
-      <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
+      {status === 'fav' &&  <IconButton sx={{ position: 'absolute', right:0,top:0 }} onClick={handleClickRemoveFavorite} aria-label="add to favorites"> 
+          <FavoriteIcon sx={{ color: 'red' }} />
+      </IconButton>}
+      {status === 'nofav' && <IconButton sx={{ position: 'absolute', right:0,top:0 }} onClick={handleClickFavorite} aria-label="add to favorites"> 
+           <FavoriteIcon />
+      </IconButton>}
     </Box>
   );
 };

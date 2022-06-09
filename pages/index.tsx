@@ -19,10 +19,7 @@ import UserCards from "../components/UserCards";
 import NoResult from "../components/NoResult";
 import NoItem from "../components/NoItem";
 import Grid from "@mui/material/Grid";
-import ArchiveIcon from "@mui/icons-material/Archive";
-import { AnyAction } from "@reduxjs/toolkit";
-import { setDefaultResultOrder } from "dns";
-import { selectUsers, setSelectedUser,setUsers,addFavorites} from "app/store/slices/user";
+import { selectUsers, setSelectedUser,setUsers,addFavorites,selectFavorites, removeFavorites} from "app/store/slices/user";
 import { useSelector, useDispatch } from "react-redux";
 const Home: NextPage = (props: any) => {
   const { theme, resolvedTheme, setTheme } = useTheme();
@@ -30,6 +27,7 @@ const Home: NextPage = (props: any) => {
   const label = { inputProps: { "aria-label": "Switch demo" } };
   const [value, setValue] = useState(0);
   const userList =  useSelector(selectUsers);
+  const favList = useSelector(selectFavorites);
   const [dataEmpty , setDataEmpty] = useState(false);
   const [search, setSearch] = useState('');
   const [counter, setCounter] = useState(0);
@@ -90,7 +88,13 @@ const Home: NextPage = (props: any) => {
 
   }
   const handleFavorite = (user:any) =>{
+
     dispatch(addFavorites(user));
+  }
+
+  const handleRemoveFavorite = (user:any) =>{
+
+    dispatch(removeFavorites(user));
   }
 
 
@@ -157,7 +161,7 @@ const Home: NextPage = (props: any) => {
           <Grid container spacing={2}>
             {userList.map((item, index) => (
               <Grid item xs={6} md={6}>
-                <UserCards key={index} data={item} onClickDetail={handleCardDetail} onClickFavorite={handleFavorite}></UserCards>
+                <UserCards key={index} data={item} status={favList.find(user => user.login === item.login) ? "fav" : "nofav"} onClickDetail={handleCardDetail} onClickFavorite={handleFavorite} onClickRemoveFavorite={handleRemoveFavorite}></UserCards>
               </Grid>
             ))}
           </Grid>

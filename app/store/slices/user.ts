@@ -23,14 +23,13 @@ export const UserSlice = createSlice({
             state.selectedUser = action.payload;
         },
         addFavorites : (state, action) => {
-           //create new variable to store the new favorites
-              let newFavorites = [...state.favorites];
-            //check if the user is already in the favorites
-            if(!newFavorites.find(user => user.id === action.payload.id)){
-                //if not in the favorites, add it
-                newFavorites.push(action.payload);
-            }
+           //add to favorites
+              state.favorites.push(action.payload);
         },
+        removeFavorites : (state, action) => {
+            //remove from favorites
+            state.favorites = state.favorites.filter(fav => fav.id !== action.payload.id);
+        }
     },
 
     extraReducers : {
@@ -40,7 +39,7 @@ export const UserSlice = createSlice({
         }
     }
 });
-export const {setUsers, setSelectedUser,addFavorites} = UserSlice.actions;
+export const {setUsers, setSelectedUser,addFavorites,removeFavorites} = UserSlice.actions;
 
 export const selectSelectedUser = (state: AppState) => state.user.selectedUser;
 export const selectUsers = (state: AppState) => state.user.users;

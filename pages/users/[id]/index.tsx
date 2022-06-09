@@ -16,7 +16,7 @@ import Avatar from "@mui/material/Avatar";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 
-import { selectUsers, setSelectedUser,setUsers,addFavorites,selectSelectedUser} from "app/store/slices/user";
+import { selectUsers, setSelectedUser,setUsers,addFavorites,selectSelectedUser,removeFavorites,selectFavorites} from "app/store/slices/user";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from 'next/router'
@@ -82,11 +82,12 @@ const UserDetailPage: NextPage = () => {
   const dispatch = useDispatch();
   const [search, setSearch] = useState("");
   const user = useSelector(selectSelectedUser);
+  const favList = useSelector(selectFavorites);
   const [userDetail, setUserDetail] = useState(user);
   const [loading, setLoading] = useState(false);
   const [userRepo, setUserRepo] = useState([]);
-  const [userFollowers, setUserFollowers] = useState([]);
-  const [userFollowing, setUserFollowing] = useState([]);
+  const [userFollowers, setUserFollowers] = useState<any[]>([]);
+  const [userFollowing, setUserFollowing] = useState<any[]>([]);
  
   //run getUerDetail function when the page is loaded
   useEffect(() => {
@@ -103,6 +104,10 @@ const UserDetailPage: NextPage = () => {
   }
   const handleFavorite = (user:any) =>{
     dispatch(addFavorites(user));
+  }
+  const handleRemoveFavorite = (user:any) =>{
+
+    dispatch(removeFavorites(user));
   }
 
   // make function to call api users from github api
@@ -264,7 +269,7 @@ const UserDetailPage: NextPage = () => {
             <Grid container spacing={2}>
               {userFollowers.map((item,index) => (
                 <Grid item xs={12} sm={6} md={6} lg={6}>
-                <UserCards key={index} data={item} onClickDetail={handleCardDetail} onClickFavorite={handleFavorite}></UserCards>
+                <UserCards key={index} data={item} onClickDetail={handleCardDetail} status={favList.find(user => user?.login === item?.login) ? "fav" : "nofav"} onClickFavorite={handleFavorite} onClickRemoveFavorite={handleRemoveFavorite}></UserCards>
                   </Grid>
               ))}
             </Grid>
@@ -275,7 +280,7 @@ const UserDetailPage: NextPage = () => {
             <Grid container spacing={2}>
               {userFollowing.map((item,index) => (
                 <Grid item xs={12} sm={6} md={6} lg={6}>
-                <UserCards key={index} data={item} onClickDetail={handleCardDetail} onClickFavorite={handleFavorite}></UserCards>
+                <UserCards key={index} data={item} onClickDetail={handleCardDetail} status={favList.find(user => user?.login === item?.login) ? "fav" : "nofav"} onClickFavorite={handleFavorite} onClickRemoveFavorite={handleRemoveFavorite}></UserCards>
                   </Grid>
               ))}
             </Grid>
