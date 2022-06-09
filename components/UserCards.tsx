@@ -44,9 +44,9 @@ const Post: React.FC<Props> = ({ data }) => {
           minWidth: { md: 350 },
         }}
       >
-        {/* <IconButton aria-label="add to favorites">
+        <IconButton aria-label="add to favorites">
           <FavoriteIcon />
-        </IconButton> */}
+        </IconButton>
         <Box component="span" sx={{ fontSize: 16, mt: 1 }}>
           {data.login}
         </Box>

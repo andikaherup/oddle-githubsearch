@@ -4,6 +4,7 @@ import { css } from "@emotion/react";
 import { ReactNode, useEffect, useState } from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
+import Link from 'next/link'
 import Box from "@mui/material/Box";
 import { useTheme } from "next-themes";
 import { Button, CircularProgress, Fab, Pagination, Paper, Stack, Switch } from "@mui/material";
@@ -13,6 +14,7 @@ import RestoreIcon from "@mui/icons-material/Restore";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import TextField from "@mui/material/TextField";
 import UserCards from "../components/UserCards";
+import NoResult from "../components/NoResult";
 import NoItem from "../components/NoItem";
 import Grid from "@mui/material/Grid";
 import ArchiveIcon from "@mui/icons-material/Archive";
@@ -28,6 +30,7 @@ const Home: NextPage = () => {
   const [order,setOrder] = useState('desc');
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
+  const [first , setFirst] = useState(true);
   const data = [
     {
       name: "Bobs",
@@ -102,11 +105,13 @@ const Home: NextPage = () => {
     );
     const data = await response.json();
     //set loading false after request
+    setFirst(false);
     setLoading(false);
     setUsers(data.items);
     setCounter(data.total_count);
   };
-
+ 
+  
   const handleChange = (event:any) =>{
     setSearch(event.target.value);
     console.log(search);
@@ -120,7 +125,7 @@ const Home: NextPage = () => {
 
 
   return (
-    <Box sx={{ pb: 7, display: "flex", justifyContent: "center" }}>
+    <Box sx={{ pb: 7, display: "flex",height: '100vh', justifyContent: "center" }}>
       <Box
         // width={xl : "100%", lg : "100%", md : "100%", sm : "100%", xs : "100%"}
         sx={{
@@ -171,7 +176,10 @@ const Home: NextPage = () => {
         {loading && <Box sx={{ display:"flex" ,height: "100vh", flexDirection: "column" ,justifyContent: "center",alignItems: 'center'}}>
           <CircularProgress color="secondary"
            />  <Typography>Loading...</Typography></Box>}
-        {!loading && users && users.length === 0 && <Box sx={{ display: "flex",height: "100vh", justifyContent: "center",px: 2, mt: 5 }}>
+        {!loading && users && !first && users.length === 0 && <Box sx={{ display: "flex",height: "100vh", justifyContent: "center",px: 2, mt: 5 }}>
+          <NoResult value={search} />  
+        </Box> }
+        {!loading && users && first && users.length === 0 && <Box sx={{ display: "flex",height: "100vh", justifyContent: "center",px: 2, mt: 5 }}>
           <NoItem />  
         </Box> }
         {!loading && users && users.length > 0 && <Box sx={{ height: "100vh",px: 2, mt: 5 }}>
@@ -205,8 +213,8 @@ const Home: NextPage = () => {
           value={value}
           onChange={(event, newValue) => {}}
         >
-          <BottomNavigationAction label="Search" icon={<RestoreIcon />} />
-          <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
+         <BottomNavigationAction label="Search" icon={ <Link href="/"><RestoreIcon /></Link>} />
+          <BottomNavigationAction label="Favorites" icon={<Link href="/liked"><FavoriteIcon /></Link>} />
         </BottomNavigation>
       </Paper>
     </Box>
